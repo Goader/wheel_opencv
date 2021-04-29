@@ -1,15 +1,9 @@
-#include "../include/pedal.h"
+#include "../../include/controllers/pedal.h"
 
 Pedal::Pedal(std::string name) : name{name}, pressed{0} {
     if (name == "gas") code = 0x57;  // W key
     else if (name == "brake") code = 0x53;  // S key
     else throw std::invalid_argument("The name must be either 'gas' or 'break'!");
-}
-
-void Pedal::start() {
-    active = true;
-    // std::thread t(&Pedal::run, this);
-    run();
 }
 
 void Pedal::setPressed(int pressed) {
@@ -19,10 +13,9 @@ void Pedal::setPressed(int pressed) {
     this->pressed = pressed;
 }
 
-void Pedal::run() {
+void Pedal::run() const {
     bool released = true;
     while (this->active) {
-        // std::cout << "still running" << pressed << std::endl;
         if (pressed == 100 && released) {
             press(this->code);
             released = false;

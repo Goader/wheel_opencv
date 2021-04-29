@@ -8,17 +8,22 @@ find_package(OpenCV REQUIRED)
 find_package(Threads REQUIRED)
 
 set(HEADERS
-    include/keyboard.h
-    include/pedal.h)
+    include/controllers/controller.h
+    include/controllers/pedal.h
+    include/controllers/wheel.h
+    include/utils/keyboard.h)
+
 
 set(SOURCES
     src/main.cpp
-    src/pedal.cpp
-    src/keyboard.cpp)
+    src/controllers/pedal.cpp
+    src/controllers/wheel.cpp
+    src/utils/keyboard.cpp)
+
+# file(GLOB_RECURSE HEADERS *.h *.hpp)
+# file(GLOB_RECURSE SOURCES *.cpp *.cc *.c)
 
 add_executable(wheel ${SOURCES} ${HEADERS})
-
-# add_executable(wheel include/keyboard.h include/pedal.h src/keyboard.cpp src/pedal.cpp src/main.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
