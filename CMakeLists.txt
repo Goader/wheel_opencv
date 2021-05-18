@@ -7,21 +7,24 @@ enable_testing()
 find_package(OpenCV REQUIRED)
 find_package(Threads REQUIRED)
 
-set(HEADERS
-    include/controllers/controller.h
-    include/controllers/pedal.h
-    include/controllers/wheel.h
-    include/utils/keyboard.h)
+# set(HEADERS
+#     include/trackers/controllertracker.h
+#     include/trackers/pedaltracker.h
+#     include/trackers/wheeltracker.h
+#     include/controllers/controller.h
+#     include/controllers/pedal.h
+#     include/controllers/wheel.h
+#     include/utils/keyboard.h)
 
 
-set(SOURCES
-    src/main.cpp
-    src/controllers/pedal.cpp
-    src/controllers/wheel.cpp
-    src/utils/keyboard.cpp)
+# set(SOURCES
+#     src/main.cpp
+#     src/controllers/pedal.cpp
+#     src/controllers/wheel.cpp
+#     src/utils/keyboard.cpp)
 
-# file(GLOB_RECURSE HEADERS *.h *.hpp)
-# file(GLOB_RECURSE SOURCES *.cpp *.cc *.c)
+file(GLOB_RECURSE HEADERS include/*.h include/*.hpp)
+file(GLOB_RECURSE SOURCES src/*.cpp src/*.cc src/*.c)
 
 add_executable(wheel ${SOURCES} ${HEADERS})
 
