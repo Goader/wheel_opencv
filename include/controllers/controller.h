@@ -1,6 +1,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include "../utils/keyboard.h"
+
 class Controller {
 protected:
     bool active;
@@ -10,6 +12,8 @@ public:
         active = true;
         run();
     }
+
+    virtual void setState(double state) = 0;
 
     void shut_down() {
         active = false;

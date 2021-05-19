@@ -1,7 +1,6 @@
 #ifndef PEDAL_H
 #define PEDAL_H
 
-#include "../utils/keyboard.h"
 #include "controller.h"
 #include <iostream>
 
@@ -18,7 +17,7 @@ class Pedal : public Controller {
 public:
     explicit Pedal(std::string name);
 
-    void setPressed(int pressed);
+    void setState(double pressed) override;
 };
 
 #endif  // PEDAL_H

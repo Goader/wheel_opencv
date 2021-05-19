@@ -1,10 +1,7 @@
 #include "../../include/trackers/pedaltracker.h"
 
-int PedalTracker::bufferY = -1;
-
-void PedalTracker::onClick(int event, int x, int y, int flags, void* param) {
-    if (event != cv::EVENT_LBUTTONDOWN) return;
-    PedalTracker::bufferY = y;
+double PedalTracker::calculateState(double posX, double posY) const {
+    return 100 * (posY - minY) / (maxY - minY);
 }
 
 void PedalTracker::init(std::string trackerType) {
@@ -19,7 +16,6 @@ void PedalTracker::init(std::string trackerType) {
     this->trackerType = trackerType;
 
     cv::Mat frame;
-    bool ok;
 
     // calibrate maxY
     bufferY = -1;
@@ -27,14 +23,11 @@ void PedalTracker::init(std::string trackerType) {
     cv::namedWindow(highestPosName, cv::WindowFlags::WINDOW_AUTOSIZE);
     cv::setMouseCallback(highestPosName, PedalTracker::onClick, 0);
     while (true) {
-        ok = cap->read(frame);
-        if (!ok) throw std::system_error(ENODEV, 
-                                         std::generic_category(), 
-                                         "Frame cannot be read from device");
+        stream->read(frame);
 
         cv::imshow(highestPosName, frame);
-        maxY = bufferY;
-        std::cout << "DEBUG: " << maxY << std::endl;
+        minY = bufferY;
+        std::cout << "DEBUG: " << minY << std::endl;
 
         int k = cv::waitKey(1) & 0xff;  // ESC button
         if (k == 27) break;
@@ -47,14 +40,11 @@ void PedalTracker::init(std::string trackerType) {
     cv::namedWindow(lowestPosName, cv::WindowFlags::WINDOW_AUTOSIZE);
     cv::setMouseCallback(lowestPosName, PedalTracker::onClick, 0);
     while (true) {
-        ok = cap->read(frame);
-        if (!ok) throw std::system_error(ENODEV, 
-                                         std::generic_category(), 
-                                         "Frame cannot be read from device");
+        stream->read(frame);
 
         cv::imshow(lowestPosName, frame);
-        minY = bufferY;
-        std::cout << "DEBUG: " << minY << std::endl;
+        maxY = bufferY;
+        std::cout << "DEBUG: " << maxY << std::endl;
 
         int k = cv::waitKey(1) & 0xff;  // ESC button
         if (k == 27) break;
@@ -67,64 +57,12 @@ void PedalTracker::init(std::string trackerType) {
     }
 
     // ensure that minY and maxY have different values
-    if (minY == maxY) {
-        throw std::runtime_error("Highest and lowest position must have different values!");
-    }
-
-    // select ROI and init tracker
-    for (int i = 0; i < 10; i++) {
-        ok = cap->read(frame);
-        if (!ok)
-            throw std::system_error(ENODEV, std::generic_category(), "Frame cannot be read from device");
+    if (maxY <= minY) {
+        throw std::runtime_error("The highest position must have greater value than the lowest!");
     }
 
     std::string ROIName = "Select ROI [" + name + "]";
     cv::Rect2d bbox = cv::selectROI(ROIName, frame, true);
     tracker->init(frame, bbox);
     cv::destroyWindow(ROIName);
-}
-
-void PedalTracker::track() const {
-    cv::Mat frame;
-    cv::Rect2d bbox;
-    bool ok;
-
-    std::string windowName = "Tracking [" + name + "]";
-    cv::namedWindow(windowName, cv::WindowFlags::WINDOW_AUTOSIZE);
-
-    while (true) {
-        ok = cap->read(frame);
-        if (!ok) break;
-        
-        int64 timer = cv::getTickCount();
-
-        ok = tracker->update(frame, bbox);
-
-        // sets value depending on the current position and calibrated bounds
-        double position = bbox.y + bbox.height / 2;
-        pedal->setPressed((position - minY) / (maxY - minY));
-
-        auto fps = cv::getTickFrequency() / (cv::getTickCount() - timer);
-
-        // showing bbox
-        if (ok)
-            cv::rectangle(frame, bbox, cv::Scalar(0, 255, 0), 2, 1);
-        else 
-            cv::putText(frame, "Tracking failure detected", cv::Point(100, 80), 
-                        cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0, 0, 255), 2);
-
-        // legend
-        cv::putText(frame, trackerType + " Tracker", cv::Point(100, 20), 
-                    cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(50, 170, 50), 2);
-
-        cv::putText(frame, "FPS : " + std::to_string(fps), cv::Point(100, 50), 
-                    cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(50, 170, 50), 2);
-
-        cv::imshow(windowName, frame);
-
-        int k = cv::waitKey(1) & 0xff;  // ESC button
-        if (k == 27) break;
-    }
-
-    cv::destroyWindow(windowName);
 }

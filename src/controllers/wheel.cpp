@@ -1,14 +1,63 @@
 #include "../../include/controllers/wheel.h"
 
-void Wheel::setTurned(int angle) {
-    if (angle < -180) angle = -180;
-    else if (angle > 180) angle = 180;
-
-    this->angle = angle;
+void Wheel::setState(double angle) {
+    if (angle < -170) this->angle = -180;
+    else if (angle > 170) this->angle = 180;
+    else if (abs(angle) < 10) this->angle = 0;
+    else this->angle = (int)angle;
 }
 
 void Wheel::run() const {
-    // TODO invent a way on how to send turns
+    // a way on how to send turns
     // can be pressing the mouse, and changing its x value (horizontal movement)
     // or it can be as with the gas and brake (pressing A and D in some time periods)
+    bool leftReleased = true;
+    bool rightReleased = true;
+    while (this->active) {
+        if (angle == 180 && rightReleased) {
+            press(rightCode);
+            rightReleased = false;
+            Sleep(50);
+        }
+        else if (angle == -180 && leftReleased) {
+            press(leftCode);
+            leftReleased = false;
+            Sleep(50);
+        }
+        else if (angle == 0 && (!leftReleased || !rightReleased)) {
+            release(leftCode);
+            release(rightCode);
+            leftReleased = rightReleased = true;
+            Sleep(50);
+        }
+        else if (angle < 0 && angle != -180) {
+            release(rightCode);
+            rightReleased = true;
+
+            press(leftCode);
+            leftReleased = false;
+            
+            Sleep(100);
+
+            release(leftCode);
+            leftReleased = true;
+
+            Sleep(120 + (100 * angle) / 180);
+        }
+        else if (angle > 0 && angle != 180) {
+            release(leftCode);
+            leftReleased = true;
+
+            press(rightCode);
+            rightReleased = false;
+            
+            Sleep(100);
+
+            release(rightCode);
+            rightReleased = true;
+
+            Sleep(120 - (100 * angle) / 180);
+        }
+        else Sleep(20);
+    }
 }

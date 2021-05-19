@@ -6,11 +6,12 @@ Pedal::Pedal(std::string name) : name{name}, pressed{0} {
     else throw std::invalid_argument("The name must be either 'gas' or 'break'!");
 }
 
-void Pedal::setPressed(int pressed) {
-    if (pressed < 8) pressed = 0;
-    else if (pressed > 92) pressed = 100;
+void Pedal::setState(double pressed) {
+    if (pressed < 8) this->pressed = 0;
+    else if (pressed > 92) this->pressed = 100;
+    else this->pressed = (int)pressed;
 
-    this->pressed = pressed;
+    std::cout << this->pressed << std::endl;
 }
 
 void Pedal::run() const {
@@ -37,5 +38,6 @@ void Pedal::run() const {
 
             Sleep(120 - pressed);  // '100 - pressed' will always be from [8, 92] interval
         }
+        else Sleep(20);
     }
 }

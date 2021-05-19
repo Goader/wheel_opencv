@@ -1,53 +1,66 @@
 #include <opencv2/opencv.hpp>
-#include <opencv2/videoio.hpp>
-#include <opencv2/tracking.hpp>
-#include <opencv2/tracking/tracking_legacy.hpp>
 #include <iostream>
 #include <thread>
 
 #include "../include/controllers/pedal.h"
+#include "../include/controllers/wheel.h"
+#include "../include/trackers/wheeltracker.h"
 #include "../include/trackers/pedaltracker.h"
+#include "../include/utils/stream.h"
 
 int main() {
-    cv::VideoCapture cap = cv::VideoCapture(0);
-    if (!cap.isOpened()) {
-        throw std::system_error(ENODEV, std::generic_category(), "Cannot access the device");
-    }
+    // setting up streams
+    // NOTE: camera indices may change depending on your current setup
+    Stream pedalStream(0);
+    Stream wheelStream(1);
+    
+    std::thread pedalStreamThread(&Stream::start, &pedalStream);
+    std::thread wheelStreamThread(&Stream::start, &wheelStream);
 
-    // setting up pedals
+    //setting up the wheel and the pedals
+    Wheel wheel;
     Pedal gasPedal("gas");
     Pedal brakePedal("brake");
 
+    std::thread wheelThread(&Wheel::start, &wheel);
     std::thread gPedalThread(&Pedal::start, &gasPedal);
     std::thread bPedalThread(&Pedal::start, &brakePedal);
 
-    // setting up pedal trackers
-    PedalTracker gasPedalTracker(cap, gasPedal, "Gas");
-    PedalTracker brakePedalTracker(cap, brakePedal, "Brake");
+    // setting up the trackers
+    WheelTracker wheelTracker(wheelStream, wheel, "Wheel");
+    PedalTracker gasPedalTracker(pedalStream, gasPedal, "Gas");
+    PedalTracker brakePedalTracker(pedalStream, brakePedal, "Brake");
 
-    gasPedalTracker.init("MedianFlow");
-    brakePedalTracker.init("MedianFlow");
+    wheelTracker.init("CSRT");
+    gasPedalTracker.init("CSRT");
+    brakePedalTracker.init("CSRT");
 
+    std::thread wTrackerThread(&WheelTracker::track, &wheelTracker);
     std::thread gTrackerThread(&PedalTracker::track, &gasPedalTracker);
-    // std::thread bTrackerThread(&PedalTracker::track, &brakePedalTracker);
-    
-    // TODO create a stream class, which will produce frames from the camera,
-    // and then using Mutexes supply thread safe API for getting frames
-    // in fact, solving producer-consumer problem, having one producer and multiple consumers 
+    std::thread bTrackerThread(&PedalTracker::track, &brakePedalTracker);
 
     // waiting for trackers to complete their jobs
+    wTrackerThread.join();
     gTrackerThread.join();
-    // bTrackerThread.join();
+    bTrackerThread.join();
 
-    // trackers are down -> shutting down pedals
+    // trackers are down -> shutting down pedals and the wheel
+    wheel.shut_down();
     gasPedal.shut_down();
     brakePedal.shut_down();
 
-    cap.release();
     cv::destroyAllWindows();
 
+    wheelThread.join();
     gPedalThread.join();
     bPedalThread.join();
+
+    // shutting down streams
+    wheelStream.shut_down();
+    pedalStream.shut_down();
+
+    wheelStreamThread.join();
+    pedalStreamThread.join();
 
     return 0;
 }
