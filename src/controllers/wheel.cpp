@@ -37,12 +37,12 @@ void Wheel::run() const {
             press(leftCode);
             leftReleased = false;
             
-            Sleep(100);
+            Sleep(10);
 
             release(leftCode);
             leftReleased = true;
 
-            Sleep(120 + (100 * angle) / 180);
+            Sleep(50 + (25 * angle) / 180);
         }
         else if (angle > 0 && angle != 180) {
             release(leftCode);
@@ -51,12 +51,12 @@ void Wheel::run() const {
             press(rightCode);
             rightReleased = false;
             
-            Sleep(100);
+            Sleep(10);
 
             release(rightCode);
             rightReleased = true;
 
-            Sleep(120 - (100 * angle) / 180);
+            Sleep(50 - (25 * angle - 10) / 180);
         }
         else Sleep(20);
     }
