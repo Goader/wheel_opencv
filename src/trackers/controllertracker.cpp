@@ -14,7 +14,7 @@ void ControllerTracker::track() const {
     cv::Rect2d bbox;
     bool ok;
 
-    std::string windowName = "Tracking [" + name + "]";
+    std::string windowName = "Tracking [" + name + "] (ESC to exit)";
     cv::namedWindow(windowName, cv::WindowFlags::WINDOW_AUTOSIZE);
 
     while (true) {

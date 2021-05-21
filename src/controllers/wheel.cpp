@@ -37,7 +37,7 @@ void Wheel::run() const {
             press(leftCode);
             leftReleased = false;
             
-            Sleep(10);
+            Sleep(13);
 
             release(leftCode);
             leftReleased = true;
@@ -51,7 +51,7 @@ void Wheel::run() const {
             press(rightCode);
             rightReleased = false;
             
-            Sleep(10);
+            Sleep(13);
 
             release(rightCode);
             rightReleased = true;

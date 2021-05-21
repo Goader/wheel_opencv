@@ -38,7 +38,7 @@ void WheelTracker::init(std::string trackerType) {
     // calibrate center
     bufferX = bufferY = -1;
     centerX = centerY = -1;
-    std::string centerName = "Click on the center of the wheel [" + name + "]";
+    std::string centerName = "Click on the center of the wheel [" + name + "] (ESC to confirm)";
     cv::namedWindow(centerName, cv::WindowFlags::WINDOW_AUTOSIZE);
     cv::setMouseCallback(centerName, WheelTracker::onClick, 0);
     while (true) {
@@ -61,7 +61,7 @@ void WheelTracker::init(std::string trackerType) {
     // calibrate minAngle and maxAngle
     bufferX = -1;
     bufferY = -1;
-    std::string angleName = "Click on the fully turned wheel [" + name + "]";
+    std::string angleName = "Click on the fully turned wheel [" + name + "] (ESC to confirm)";
     cv::namedWindow(angleName, cv::WindowFlags::WINDOW_AUTOSIZE);
     cv::setMouseCallback(angleName, WheelTracker::onClick, 0);
     while (true) {
@@ -76,7 +76,7 @@ void WheelTracker::init(std::string trackerType) {
     }
     cv::destroyWindow(angleName);
 
-    std::string ROIName = "Select ROI [" + name + "]";
+    std::string ROIName = "Select ROI [" + name + "] (ENTER to confirm)";
     cv::Rect2d bbox = cv::selectROI(ROIName, frame, true);
     tracker->init(frame, bbox);
     cv::destroyWindow(ROIName);

@@ -19,7 +19,7 @@ void PedalTracker::init(std::string trackerType) {
 
     // calibrate maxY
     bufferY = -1;
-    std::string highestPosName = "Click on the highest position [" + name + "]";
+    std::string highestPosName = "Click on the highest position [" + name + "] (ESC to confirm)";
     cv::namedWindow(highestPosName, cv::WindowFlags::WINDOW_AUTOSIZE);
     cv::setMouseCallback(highestPosName, PedalTracker::onClick, 0);
     while (true) {
@@ -36,7 +36,7 @@ void PedalTracker::init(std::string trackerType) {
 
     // calibrate minY
     bufferY = -1;
-    std::string lowestPosName = "Click on the lowest position [" + name + "]";
+    std::string lowestPosName = "Click on the lowest position [" + name + "] (ESC to confirm)";
     cv::namedWindow(lowestPosName, cv::WindowFlags::WINDOW_AUTOSIZE);
     cv::setMouseCallback(lowestPosName, PedalTracker::onClick, 0);
     while (true) {
@@ -61,7 +61,7 @@ void PedalTracker::init(std::string trackerType) {
         throw std::runtime_error("The highest position must have greater value than the lowest!");
     }
 
-    std::string ROIName = "Select ROI [" + name + "]";
+    std::string ROIName = "Select ROI [" + name + "] (ENTER to confirm)";
     cv::Rect2d bbox = cv::selectROI(ROIName, frame, true);
     tracker->init(frame, bbox);
     cv::destroyWindow(ROIName);
