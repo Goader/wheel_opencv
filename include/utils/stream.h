@@ -23,9 +23,9 @@ public:
 
     void start();
 
-    void shut_down();
+    void shutDown();
 
-    void read(cv::Mat& frame);
+    void read(cv::Mat& frameDest);
 };
 
 #endif  // STREAM_H

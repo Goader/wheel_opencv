@@ -21,17 +21,16 @@ double WheelTracker::calculateState(double posX, double posY) const {
     return angle(posX, posY) * (360 / (maxAngle - minAngle));
 }
 
-void WheelTracker::init(std::string trackerType) {
-    // TODO check other algorithms for wheel
-    if (trackerType == "CSRT") {
+void WheelTracker::init(std::string trackerTypeParam) {
+    if (trackerTypeParam == "CSRT") {
         tracker = cv::legacy::TrackerCSRT::create();
     }
-    else if (trackerType == "MedianFlow") {
+    else if (trackerTypeParam == "MedianFlow") {
         tracker = cv::legacy::TrackerMedianFlow::create();
     }
     else throw std::invalid_argument("The tracker type must be either 'CSRT' or 'MedianFlow'!");
 
-    this->trackerType = trackerType;
+    trackerType = trackerTypeParam;
 
     cv::Mat frame;
 

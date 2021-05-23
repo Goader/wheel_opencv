@@ -13,7 +13,7 @@ class PedalTracker : public ControllerTracker {
 public:
     PedalTracker(Stream& stream, Pedal& pedal, std::string name) : ControllerTracker(stream, pedal, name) {}
 
-    void init(std::string trackerType) override;
+    void init(std::string trackerTypeParam) override;  // TODO not the best argument name
 };
 
 #endif  // PEDALTRACKER_H

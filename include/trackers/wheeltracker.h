@@ -17,7 +17,7 @@ class WheelTracker : public ControllerTracker {
 public:
     WheelTracker(Stream& stream, Wheel& pedal, std::string name) : ControllerTracker(stream, pedal, name) {}
 
-    void init(std::string trackerType) override;
+    void init(std::string trackerTypeParam) override;  // TODO not the best argument name
 };
 
 #endif  // WHEELTRACKER_H

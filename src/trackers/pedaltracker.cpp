@@ -1,19 +1,19 @@
 #include "../../include/trackers/pedaltracker.h"
 
-double PedalTracker::calculateState(double posX, double posY) const {
+double PedalTracker::calculateState(double, double posY) const {
     return 100 * (posY - minY) / (maxY - minY);
 }
 
-void PedalTracker::init(std::string trackerType) {
-    if (trackerType == "CSRT") {
+void PedalTracker::init(std::string trackerTypeParam) {
+    if (trackerTypeParam == "CSRT") {
         tracker = cv::legacy::TrackerCSRT::create();
     }
-    else if (trackerType == "MedianFlow") {
+    else if (trackerTypeParam == "MedianFlow") {
         tracker = cv::legacy::TrackerMedianFlow::create();
     }
     else throw std::invalid_argument("The tracker type must be either 'CSRT' or 'MedianFlow'!");
 
-    this->trackerType = trackerType;
+    trackerType = trackerTypeParam;
 
     cv::Mat frame;
 
@@ -27,7 +27,6 @@ void PedalTracker::init(std::string trackerType) {
 
         cv::imshow(highestPosName, frame);
         minY = bufferY;
-        std::cout << "DEBUG: " << minY << std::endl;
 
         int k = cv::waitKey(1) & 0xff;  // ESC button
         if (k == 27) break;
@@ -44,7 +43,6 @@ void PedalTracker::init(std::string trackerType) {
 
         cv::imshow(lowestPosName, frame);
         maxY = bufferY;
-        std::cout << "DEBUG: " << maxY << std::endl;
 
         int k = cv::waitKey(1) & 0xff;  // ESC button
         if (k == 27) break;

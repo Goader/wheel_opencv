@@ -36,6 +36,8 @@ public:
     virtual void init(std::string trackerType) = 0;
 
     void track() const;
+
+    virtual ~ControllerTracker() {}
 };
 
 #endif  // CONTROLLERTRACKER_H

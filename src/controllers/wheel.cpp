@@ -1,10 +1,10 @@
 #include "../../include/controllers/wheel.h"
 
-void Wheel::setState(double angle) {
-    if (angle < -170) this->angle = -180;
-    else if (angle > 170) this->angle = 180;
-    else if (abs(angle) < 10) this->angle = 0;
-    else this->angle = (int)angle;
+void Wheel::setState(double angleValue) {
+    if (angleValue < -170) angle = -180;
+    else if (angleValue > 170) angle = 180;
+    else if (abs(angleValue) < 10) angle = 0;
+    else angle = (int)angleValue;
 }
 
 void Wheel::run() const {

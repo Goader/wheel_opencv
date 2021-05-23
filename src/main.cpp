@@ -45,20 +45,21 @@ int main() {
     gTrackerThread.join();
     bTrackerThread.join();
 
-    // trackers are down -> shutting down pedals and the wheel
-    wheel.shut_down();
-    gasPedal.shut_down();
-    brakePedal.shut_down();
-
     cv::destroyAllWindows();
 
+    // shutting down streams
+    wheelStream.shutDown();
+    pedalStream.shutDown();
+
+    // trackers are down -> shutting down pedals and the wheel
+    wheel.shutDown();
+    gasPedal.shutDown();
+    brakePedal.shutDown();
+
+    // joining all the threads
     wheelThread.join();
     gPedalThread.join();
     bPedalThread.join();
-
-    // shutting down streams
-    wheelStream.shut_down();
-    pedalStream.shut_down();
 
     wheelStreamThread.join();
     pedalStreamThread.join();

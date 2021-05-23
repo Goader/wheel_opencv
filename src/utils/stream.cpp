@@ -26,16 +26,16 @@ void Stream::run() {
         frame_mutex.unlock();
         Sleep(sleepMS);
     }
+    cap.release();
 }
 
-void Stream::read(cv::Mat& frame) {
+void Stream::read(cv::Mat& frameDest) {
     frame_mutex.lock();
-    frame = this->frame.clone();  // FIXME not sure if works ok with deep copy
+    frameDest = frame.clone();
     frame_mutex.unlock();
 }
 
-void Stream::shut_down() {
+void Stream::shutDown() {
     shut = true;
     active = false;
-    cap.release();
 }

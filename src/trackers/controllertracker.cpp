@@ -3,7 +3,7 @@
 int ControllerTracker::bufferX = -1;
 int ControllerTracker::bufferY = -1;
 
-void ControllerTracker::onClick(int event, int x, int y, int flags, void* param) {
+void ControllerTracker::onClick(int event, int x, int y, int, void*) {
     if (event != cv::EVENT_LBUTTONDOWN) return;
     ControllerTracker::bufferX = x;
     ControllerTracker::bufferY = y;

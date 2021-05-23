@@ -17,7 +17,7 @@ class Pedal : public Controller {
 public:
     explicit Pedal(std::string name);
 
-    void setState(double pressed) override;
+    void setState(double pressedValue) override;
 };
 
 #endif  // PEDAL_H

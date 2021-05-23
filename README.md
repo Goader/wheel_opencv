@@ -25,7 +25,7 @@ As this application is designed for Windows operating system, there may appear p
 * click `Configure`
 * after lots of variables appeared find `OPENCV_EXTRA_MODULES_PATH` and set it to the folder with OpenCV-contrib source code
 * click `Configure` again
-* find `BUILD_opencv_world` variable and set it to check it (this will build one common library for all subpackages)
+* find `BUILD_opencv_world` variable and check it (this will build one common library for all subpackages)
 * click `Generate` and select your current version of Visual Studio Compiler
 * open Visual Studio and compile `ALL_BUILD` with `Release` flag (this will boost performance)
 * add `<your build folder>/install/x64/v16/bin` to `PATH` variable (notice that some numbers may differ depending on your version of OpenCV and compiler)
@@ -41,9 +41,9 @@ All the parameters in the application must be set to interpret tracking results 
 ### :film_strip: Example of calibrating parameters
 ![Calibrating example](readme/example-calibrating.gif)
 
-As we see, after calibrating 3 windows should pop out showing the current tracking state, FPS and name of the tracking algorithm.
+As we see, after calibrating - 3 windows should pop out showing the current tracking state, FPS and name of the tracking algorithm.
 
-In our case, we use **CSRT**, but it's possibly to set **MedianFlow** too. Others algorithms are not used, because after lots of testing they could not perform well for this particular problem.
+In our case, we use **CSRT**, but it's possible to set **MedianFlow** too. Others algorithms are not used, because after lots of testing they could not perform well for this particular problem.
 
 Criteria for choosing an algorithm:
 * **CSRT** - slow, but accurate. Works with low FPS, cannot handle tracking failure, needs more computing power

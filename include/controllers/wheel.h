@@ -15,7 +15,7 @@ class Wheel : public Controller {
 public:
     Wheel() : angle{0} {}
 
-    void setState(double angle) override;
+    void setState(double angleValue) override;
 };
 
 #endif  // WHEEL_H

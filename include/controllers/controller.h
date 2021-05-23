@@ -15,7 +15,7 @@ public:
 
     virtual void setState(double state) = 0;
 
-    void shut_down() {
+    void shutDown() {
         active = false;
     }
 

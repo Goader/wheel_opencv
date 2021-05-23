@@ -4,8 +4,8 @@ void press(int code) {
     INPUT pressed;
 
     pressed.type = INPUT_KEYBOARD;
-    pressed.ki.wVk = code;
-    pressed.ki.wScan = MapVirtualKey(code, MAPVK_VK_TO_VSC);
+    pressed.ki.wVk = (WORD)code;
+    pressed.ki.wScan = (WORD)MapVirtualKey(code, MAPVK_VK_TO_VSC);
     pressed.ki.time = 0;
     pressed.ki.dwFlags = KEYEVENTF_SCANCODE;
 
@@ -16,8 +16,8 @@ void release(int code) {
     INPUT released;
     
     released.type = INPUT_KEYBOARD;
-    released.ki.wVk = code;
-    released.ki.wScan = MapVirtualKey(code, MAPVK_VK_TO_VSC);
+    released.ki.wVk = (WORD)code;
+    released.ki.wScan = (WORD)MapVirtualKey(code, MAPVK_VK_TO_VSC);
     released.ki.time = 0;
     released.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
 
