@@ -2,10 +2,11 @@
 #define CONTROLLER_H
 
 #include "../utils/keyboard.h"
+#include <atomic>
 
 class Controller {
 protected:
-    bool active;
+    std::atomic_bool active;
     virtual void run() const = 0;
 public:
     void start() {

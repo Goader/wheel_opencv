@@ -10,7 +10,7 @@ class Pedal : public Controller {
     
     // int in a range of [0, 100], which says how hard the pedal is pressed
     // in fact, it can be either 0, 100 or int a range of [8, 92]
-    int pressed;
+    std::atomic_int pressed;
 
     void run() const override;
 

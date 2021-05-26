@@ -12,8 +12,10 @@ int main() {
     // setting up streams
     // NOTE: camera indices may change depending on your current setup
     // in my case: 1 - OBS Virtual Camera, 0 - DroidCam
-    Stream pedalStream(1);
-    Stream wheelStream(0);
+    Stream pedalStream(2);
+    std::cout << "Pedal stream camera found!" << std::endl;
+    Stream wheelStream(4);
+    std::cout << "Wheel stream camera found!" << std::endl;
     
     std::thread pedalStreamThread(&Stream::start, &pedalStream);
     std::thread wheelStreamThread(&Stream::start, &wheelStream);
