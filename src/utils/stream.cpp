@@ -8,17 +8,20 @@ Stream::Stream(int cameraIndex, int sleepMS) :
 }
 
 void Stream::start() {
+    frame_mutex.lock();
     if (shut) {
         throw std::runtime_error("You cannot start the stream which has been already shut down!");
     }
     active = true;
+    frame_mutex.unlock();
     run();
 }
 
 void Stream::run() {
     bool ok;
-    while (active) {
+    while (true) {
         frame_mutex.lock();
+        if (!active) break;
         ok = cap.read(frame);
         if (!ok) {
             throw std::system_error(ENODEV, std::generic_category(), "Frame cannot be read from device");
@@ -26,7 +29,7 @@ void Stream::run() {
         frame_mutex.unlock();
         Sleep(sleepMS);
     }
-    cap.release();
+    cap.release();  // generates warning: https://github.com/opencv/opencv-python/issues/198
 }
 
 void Stream::read(cv::Mat& frameDest) {
@@ -36,6 +39,8 @@ void Stream::read(cv::Mat& frameDest) {
 }
 
 void Stream::shutDown() {
+    frame_mutex.lock();
     shut = true;
     active = false;
+    frame_mutex.unlock();
 }
