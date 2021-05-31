@@ -1,0 +1,6 @@
+{
+    "pedalCameraIndex": 0,
+    "wheelCameraIndex": 1,
+    "pedalTrackingAlgorithm": "CSRT",
+    "wheelTrackingAlgorithm": "CSRT"
+}
