@@ -69,6 +69,7 @@ The name of the algorithm, and the camera indices (a special index used by Windo
 Let's see how this program allows us to play games like **Grand Theft Auto V** without having real gaming wheel or pedals (actually, real gaming wheel and pedals are used to show this, but they are not plugged in, and I'm not even sure if they still work :smile:).
 
 ![Gaming example](readme/example-gaming.gif)
+![Gaming example 2](readme/example-gaming2.gif)
 
 You should be aware of the fact, that very fast movement makes it much easier for an algorithm to fail. After failure you must run this application again and calibrate everything again.
     
